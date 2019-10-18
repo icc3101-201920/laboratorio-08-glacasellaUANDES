@@ -11,11 +11,6 @@ namespace Laboratorio_7_OOP_201902
         {
             Game game = new Game();
             game.Play();
-            
-            
-
-
-
         }
     }
 }

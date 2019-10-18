@@ -5,14 +5,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace Laboratorio_7_OOP_201902
 {
+    
     public class Game
     {
         //Constantes
         private const int DEFAULT_CHANGE_CARDS_NUMBER = 3;
+        private string DEFAULT_SAVING_PATH = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\bins\";
 
         //Atributos
         private Player[] players;
@@ -21,6 +24,82 @@ namespace Laboratorio_7_OOP_201902
         private List<SpecialCard> captains;
         private Board boardGame;
         internal int turn;
+
+        private void SaveGame()
+        {
+            // Serializamos todos los atributos de game en archivos distintos en el default_saving_path
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "players.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, this.players);
+            stream.Close();
+
+            Stream stream2 = new FileStream(this.DEFAULT_SAVING_PATH + "activeplayer.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, this.activePlayer);
+            stream2.Close();
+
+            Stream stream3 = new FileStream(this.DEFAULT_SAVING_PATH + "decks.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, this.decks);
+            stream3.Close();
+
+            Stream stream4 = new FileStream(this.DEFAULT_SAVING_PATH + "captains.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, this.captains);
+            stream4.Close();
+
+            Stream stream5 = new FileStream(this.DEFAULT_SAVING_PATH + "board.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, this.boardGame);
+            stream5.Close();
+
+            Stream stream6 = new FileStream(this.DEFAULT_SAVING_PATH + "turn.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            formatter.Serialize(stream, this.turn);
+            stream6.Close();
+        }
+
+        // Metodo para cargar la partida
+        private void LoadGame()
+        {
+            // Deserializamos todos los atributos de game desde el default_saving_path
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "players.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.players = (Player[])formatter.Deserialize(stream);
+            stream.Close();
+
+            Stream stream2 = new FileStream(this.DEFAULT_SAVING_PATH + "activeplayer.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.activePlayer = (Player)formatter.Deserialize(stream2);
+            stream2.Close();
+
+            Stream stream3 = new FileStream(this.DEFAULT_SAVING_PATH + "decks.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.decks = (List<Deck>)formatter.Deserialize(stream3);
+            stream3.Close();
+
+            Stream stream4 = new FileStream(this.DEFAULT_SAVING_PATH + "captains.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.captains = (List<SpecialCard>)formatter.Deserialize(stream4);
+            stream4.Close();
+
+            Stream stream5 = new FileStream(this.DEFAULT_SAVING_PATH + "board.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.boardGame = (Board)formatter.Deserialize(stream5);
+            stream5.Close();
+
+            Stream stream6 = new FileStream(this.DEFAULT_SAVING_PATH + "turn.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.turn = (int)formatter.Deserialize(stream6);
+            stream6.Close();
+        }
+
+
+        // Metodo para verificar si ya hay una partida guardada o no
+        private bool Saved()
+        {
+            if (File.Exists(DEFAULT_SAVING_PATH + "players.bin"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         //Constructor
         public Game()
@@ -125,7 +204,12 @@ namespace Laboratorio_7_OOP_201902
             int firstOrSecondUser = ActivePlayer.Id == 0 ? 0 : 1;
             int winner = -1;
             bool bothPlayersPlayed = false;
-            
+
+
+            // Preguntamos al usuario que quiere hacer, si cargar la partida o iniciar una nueva
+            int playerChoose = Visualization.LoadGameMenu(Saved());
+            // Si retorna 1, quiere cargar el juego, por lo que no se debe realizar el turno 0 de configuracion
+            if (playerChoose == 1) turn = 1;
 
             while (turn < 4 && !CheckIfEndGame())
             {
@@ -173,7 +257,10 @@ namespace Laboratorio_7_OOP_201902
                         firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
                     }
                     turn += 1;
+                    // Guardamos la partida despues de terminar el turno de configuracion 
+                    this.SaveGame();
                 }
+
                 //turnos siguientes
                 else
                 {

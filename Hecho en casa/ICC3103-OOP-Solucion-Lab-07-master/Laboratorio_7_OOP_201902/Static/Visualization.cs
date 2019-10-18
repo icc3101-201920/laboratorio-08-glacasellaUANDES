@@ -8,6 +8,20 @@ namespace Laboratorio_7_OOP_201902.Static
 {
     public static class Visualization
     {
+        // Metodo para mostrar el LoadGameMenu
+        public static int LoadGameMenu(bool saved)
+        {
+            if (!saved)
+            {
+                return 2;
+            }
+            Console.Clear();
+            ShowProgramMessage("LOAD GAME MENU");
+            ShowListOptions(new List<string>() { "Cargar partida", "Nueva partida" });
+            int option = GetUserInput(2);
+            return option;
+        }
+
         public static void ShowHand(Hand hand)
         {
             CombatCard combatCard;
@@ -29,6 +43,7 @@ namespace Laboratorio_7_OOP_201902.Static
             }
             Console.WriteLine();
         }
+
         public static void ShowDecks(List<Deck> decks)
         {
             Console.WriteLine("Select one Deck:");
@@ -37,6 +52,7 @@ namespace Laboratorio_7_OOP_201902.Static
                 Console.WriteLine($"({i}) Deck {i+1}");
             }
         }
+
         public static void ShowCaptains(List<SpecialCard> captains)
         {
             Console.WriteLine("Select one captain:");
@@ -45,6 +61,7 @@ namespace Laboratorio_7_OOP_201902.Static
                 Console.WriteLine($"({i}) {captains[i].Name}: {captains[i].Effect}");
             }
         }
+
         public static int GetUserInput(int maxInput, bool stopper = false)
         {
             bool valid = false;
@@ -73,18 +90,21 @@ namespace Laboratorio_7_OOP_201902.Static
             }
             return -1;
         }
+
         public static void ConsoleError(string message)
         {
             Console.BackgroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ResetColor();
         }
+
         public static void ShowProgramMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(message);
             Console.ResetColor();
         }
+
         public static void ShowListOptions (List<string> options, string message = null)
         {
             if (message != null) Console.WriteLine($"{message}");
@@ -93,11 +113,13 @@ namespace Laboratorio_7_OOP_201902.Static
                 Console.WriteLine($"({i}) {options[i]}");
             }
         }
+
         public static void ClearConsole()
         {
             Console.ResetColor();
             Console.Clear();
         }
+
         public static void ShowBoard(Board board, int player, int [] lifePoints, int[] attackPoints)
         {
             int theOtherPlayer = player == 0 ? 1 : 0;
@@ -120,6 +142,7 @@ namespace Laboratorio_7_OOP_201902.Static
             ShowLineBoard(board, EnumType.longRange, player, board.PlayerCards[player].ContainsKey(EnumType.bufflongRange));
             Console.WriteLine("\n");
         }
+
         public static void ShowLineBoard(Board board, EnumType line, int player, bool buff)
         {
             if (buff)
