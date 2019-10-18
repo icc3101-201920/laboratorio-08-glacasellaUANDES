@@ -14,7 +14,7 @@ namespace Laboratorio_6_OOP_201902
     {
         //Constantes
         private const int DEFAULT_CHANGE_CARDS_NUMBER = 3;
-        private const string DEFAULT_SAVING_PATH = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\bins\";
+        private string DEFAULT_SAVING_PATH = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName + @"\bins\";
 
         //Atributos
         private Player[] players;
@@ -34,25 +34,25 @@ namespace Laboratorio_6_OOP_201902
             formatter.Serialize(stream, this.players);
             stream.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "activeplayer.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream2 = new FileStream(this.DEFAULT_SAVING_PATH + "activeplayer.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, this.activePlayer);
-            stream.Close();
+            stream2.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "decks.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream3 = new FileStream(this.DEFAULT_SAVING_PATH + "decks.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, this.decks);
-            stream.Close();
+            stream3.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "captains.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream4 = new FileStream(this.DEFAULT_SAVING_PATH + "captains.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, this.captains);
-            stream.Close();
+            stream4.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "board.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream5 = new FileStream(this.DEFAULT_SAVING_PATH + "board.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, this.boardGame);
-            stream.Close();
+            stream5.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "turn.bin", FileMode.Create, FileAccess.Write, FileShare.None);
+            Stream stream6 = new FileStream(this.DEFAULT_SAVING_PATH + "turn.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, this.turn);
-            stream.Close();
+            stream6.Close();
         }
 
         // Metodo para cargar la partida
@@ -65,25 +65,25 @@ namespace Laboratorio_6_OOP_201902
             this.players = (Player[])formatter.Deserialize(stream);
             stream.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "activeplayer.bin", FileMode.Open, FileAccess.Read, FileShare.None);
-            this.activePlayer= (Player)formatter.Deserialize(stream);
-            stream.Close();
+            Stream stream2 = new FileStream(this.DEFAULT_SAVING_PATH + "activeplayer.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.activePlayer= (Player)formatter.Deserialize(stream2);
+            stream2.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "decks.bin", FileMode.Open, FileAccess.Read, FileShare.None);
-            this.activePlayer = (List<Deck>)formatter.Deserialize(stream);
-            stream.Close();
+            Stream stream3 = new FileStream(this.DEFAULT_SAVING_PATH + "decks.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.decks = (List<Deck>)formatter.Deserialize(stream3);
+            stream3.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "captains.bin", FileMode.Open, FileAccess.Read, FileShare.None);
-            this.activePlayer = (List<SpecialCard>)formatter.Deserialize(stream);
-            stream.Close();
+            Stream stream4 = new FileStream(this.DEFAULT_SAVING_PATH + "captains.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.captains = (List<SpecialCard>)formatter.Deserialize(stream4);
+            stream4.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "board.bin", FileMode.Open, FileAccess.Read, FileShare.None);
-            this.boardGame = (Board)formatter.Deserialize(stream);
-            stream.Close();
+            Stream stream5 = new FileStream(this.DEFAULT_SAVING_PATH + "board.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.boardGame = (Board)formatter.Deserialize(stream5);
+            stream5.Close();
 
-            Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "turn.bin", FileMode.Open, FileAccess.Read, FileShare.None);
-            this.turn = (int)formatter.Deserialize(stream);
-            stream.Close();
+            Stream stream6 = new FileStream(this.DEFAULT_SAVING_PATH + "turn.bin", FileMode.Open, FileAccess.Read, FileShare.None);
+            this.turn = (int)formatter.Deserialize(stream6);
+            stream6.Close();
         }
 
 
@@ -199,9 +199,9 @@ namespace Laboratorio_6_OOP_201902
             int firstOrSecondUser = ActivePlayer.Id == 0 ? 0 : 1;
 
             // Preguntamos al usuario que quiere hacer, si cargar la partida o iniciar una nueva
-            int playerChoose = this.LoadGameMenu();
+            int playerChoose = Visualization.LoadGameMenu(Saved());
             // Si retorna 1, quiere cargar el juego, por lo que no se debe realizar el turno 0 de configuracion
-            if (playerChose == 1) turn = 1;
+            if (playerChoose == 1) turn = 1;
 
             //turno 0 o configuracion
             if (turn == 0)
@@ -250,21 +250,7 @@ namespace Laboratorio_6_OOP_201902
                 this.SaveGame();
             }
         }
-
-        // Metodo para mostrar el menu al usuario, verificando si hay algo guardado antes o no
-        // Si no hay nada guardado, retornamos 2, que corresponde a la opcion nueva partida
-        public int LoadGameMenu()
-        {
-            if (!this.Saved())
-            {
-                return 2;
-            }
-            Console.Clear();
-            Visualization.ShowProgramMessage("LOAD GAME MENU");
-            Visualization.ShowListOptions(new List<string>() { "Cargar partida", "Nueva partida" });
-            int option = Visualization.GetUserInput(2);
-            return option;
-        }
+        
 
 
         public void AddDecks()

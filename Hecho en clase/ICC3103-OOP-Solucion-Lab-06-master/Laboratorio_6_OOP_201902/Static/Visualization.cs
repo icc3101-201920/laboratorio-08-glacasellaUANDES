@@ -8,6 +8,20 @@ namespace Laboratorio_6_OOP_201902.Static
 {
     public static class Visualization
     {
+
+        public static int LoadGameMenu(bool saved)
+        {
+            if (!saved)
+            {
+                return 2;
+            }
+            Console.Clear();
+            ShowProgramMessage("LOAD GAME MENU");
+            ShowListOptions(new List<string>() { "Cargar partida", "Nueva partida" });
+            int option = GetUserInput(2);
+            return option;
+        }
+
         public static void ShowHand(Hand hand)
         {
             CombatCard combatCard;
