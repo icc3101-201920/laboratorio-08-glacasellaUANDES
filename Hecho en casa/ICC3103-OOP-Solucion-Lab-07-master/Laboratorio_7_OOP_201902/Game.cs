@@ -28,16 +28,19 @@ namespace Laboratorio_7_OOP_201902
         private void SaveGame()
         {
             // Serializamos todos los atributos de game en archivos distintos en el default_saving_path
-            BinaryFormatter formatter = new BinaryFormatter();
+            BinaryFormatter formatter1 = new BinaryFormatter();
 
             Stream stream = new FileStream(this.DEFAULT_SAVING_PATH + "players.bin", FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, this.players);
+            formatter1.Serialize(stream, this.players);
             stream.Close();
 
+            BinaryFormatter formatter2 = new BinaryFormatter();
             Stream stream2 = new FileStream(this.DEFAULT_SAVING_PATH + "activeplayer.bin", FileMode.Create, FileAccess.Write, FileShare.None);
-            formatter.Serialize(stream, this.activePlayer);
+            formatter2.Serialize(stream, this.activePlayer);
             stream2.Close();
+            
 
+            /*
             Stream stream3 = new FileStream(this.DEFAULT_SAVING_PATH + "decks.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, this.decks);
             stream3.Close();
@@ -53,6 +56,7 @@ namespace Laboratorio_7_OOP_201902
             Stream stream6 = new FileStream(this.DEFAULT_SAVING_PATH + "turn.bin", FileMode.Create, FileAccess.Write, FileShare.None);
             formatter.Serialize(stream, this.turn);
             stream6.Close();
+            */
         }
 
         // Metodo para cargar la partida
@@ -117,6 +121,7 @@ namespace Laboratorio_7_OOP_201902
             players[1].Board = boardGame;
             turn = 0;
         }
+
         //Propiedades
         public Player[] Players
         {

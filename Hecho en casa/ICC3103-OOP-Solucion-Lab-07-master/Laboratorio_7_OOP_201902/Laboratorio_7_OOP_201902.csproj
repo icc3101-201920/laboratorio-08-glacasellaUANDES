@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="bins\" />
+    <Compile Remove="bins\**" />
+    <EmbeddedResource Remove="bins\**" />
+    <None Remove="bins\**" />
   </ItemGroup>
 
 </Project>
