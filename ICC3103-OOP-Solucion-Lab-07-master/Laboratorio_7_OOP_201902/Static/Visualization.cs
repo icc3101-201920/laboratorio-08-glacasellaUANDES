@@ -8,6 +8,7 @@ namespace Laboratorio_7_OOP_201902.Static
 {
     public static class Visualization
     {
+        private const string separador = "============================================";
         // Metodo para mostrar el LoadGameMenu
         public static int LoadGameMenu(bool saved)
         {
@@ -44,12 +45,40 @@ namespace Laboratorio_7_OOP_201902.Static
             Console.WriteLine();
         }
 
+        // Metodo modificado para que muestre los datos de cada carta
         public static void ShowDecks(List<Deck> decks)
         {
             Console.WriteLine("Select one Deck:");
-            for (int i = 0; i<decks.Count; i++)
+            for (int i = 0; i < decks.Count; i++)
             {
-                Console.WriteLine($"({i}) Deck {i+1}");
+                Console.WriteLine($"({i}) Deck {i + 1}");
+                // Recorremos las cartas del deck
+                foreach (Card card in decks[i].Cards)
+                {
+                    Console.WriteLine(separador);
+                    // Si es combatCard
+                    if (card.Type == EnumType.melee || card.Type == EnumType.range || card.Type == EnumType.longRange)
+                    {
+                        // Parseamos, obtenemos las caracteristicas y las imprimimos
+                        CombatCard parsed = (CombatCard)card;
+                        List<string> characteristics = parsed.GetCharacteristics();
+                        foreach (string chara in characteristics)
+                        {
+                            ShowProgramMessage(chara);
+                        }
+                    }
+                    else
+                    {
+                        // Parseamos, obtenemos las caracteristicas y las imprimimos
+                        SpecialCard parsed = (SpecialCard)card;
+                        List<string> characteristics = parsed.GetCharacteristics();
+                        foreach (string chara in characteristics)
+                        {
+                            ShowProgramMessage(chara);
+                        }
+                    }
+                    Console.WriteLine(separador);
+                }
             }
         }
 
@@ -59,6 +88,18 @@ namespace Laboratorio_7_OOP_201902.Static
             for (int i = 0; i < captains.Count; i++)
             {
                 Console.WriteLine($"({i}) {captains[i].Name}: {captains[i].Effect}");
+                // Recorremos las cartas de captains
+                foreach (SpecialCard card in captains)
+                {
+                    // Obtenemos las caracteristicas y las mostramos
+                    List<string> characteristics = card.GetCharacteristics();
+                    Console.WriteLine(separador);
+                    foreach (string chara in characteristics)
+                    {
+                        ShowProgramMessage(chara);
+                    }
+                    Console.WriteLine(separador);
+                }
             }
         }
 

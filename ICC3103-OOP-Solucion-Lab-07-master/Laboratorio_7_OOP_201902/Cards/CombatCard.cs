@@ -1,4 +1,5 @@
 ﻿using Laboratorio_7_OOP_201902.Enums;
+using Laboratorio_7_OOP_201902.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text;
 namespace Laboratorio_7_OOP_201902.Cards
 {
     [Serializable]
-    public class CombatCard : Card
+    public class CombatCard : Card, ICharacteristics
     {
         //Atributos
         private int attackPoints;
@@ -21,6 +22,15 @@ namespace Laboratorio_7_OOP_201902.Cards
             AttackPoints = attackPoints;
             Hero = hero;
         }
+
+
+        public List<string> GetCharacteristics()
+        {
+            List<string> returninglist = new List<string>() { "Name: " + this.name , "Type: " + Convert.ToString(this.type),
+            "Effect: " + this.effect, "Attack Points: " + this.attackPoints, "Hero: " + Convert.ToString(this.hero)};
+            return returninglist;
+        }
+
 
         //Propiedades
         public int AttackPoints

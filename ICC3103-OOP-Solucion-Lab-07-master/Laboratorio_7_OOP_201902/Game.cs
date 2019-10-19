@@ -228,15 +228,20 @@ namespace Laboratorio_7_OOP_201902
                         Visualization.ClearConsole();
                         //Mostrar mensaje de inicio
                         Visualization.ShowProgramMessage($"Player {ActivePlayer.Id+1} select Deck and Captain:");
-                        //Preguntar por deck
+
+                        //Preguntar por deck. Mostramos el deck, los valores de cada carta
+                        // Este metodo de showdecks lo modifique para que tambien muestre los datos de cada carta del deck
                         Visualization.ShowDecks(this.Decks);
                         userInput = Visualization.GetUserInput(this.Decks.Count - 1);
                         Deck deck = new Deck();
                         deck.Cards = new List<Card>(Decks[userInput].Cards);
                         ActivePlayer.Deck = deck;
-                        //Preguntar por capitan
+
+                        //Preguntar por capitan. mostramos las cartas, los valores de cada carta
+                        // Este metodo de showcaptains lo modifique para que tambien muestre los datos de cada carta
                         Visualization.ShowCaptains(Captains);
                         userInput = Visualization.GetUserInput(this.Captains.Count - 1);
+
                         ActivePlayer.ChooseCaptainCard(new SpecialCard(Captains[userInput].Name, Captains[userInput].Type, Captains[userInput].Effect));
                         //Asignar mano
                         ActivePlayer.FirstHand();
@@ -322,12 +327,16 @@ namespace Laboratorio_7_OOP_201902
                             if (ActivePlayer.Hand.Cards.Count == 0)
                             {
                                 firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
+                                // Guardamos el estado del juego
+                                this.SaveGame();
                                 break;
                             }
                         }
                         else
                         {
                             firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
+                            // Guardamos el estado del juego
+                            this.SaveGame();
                             break;
                         }
                     }
@@ -377,6 +386,8 @@ namespace Laboratorio_7_OOP_201902
             }
 
         }
+
+
         public void AddDecks()
         {
             string path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent + @"\Files\Decks.txt";
